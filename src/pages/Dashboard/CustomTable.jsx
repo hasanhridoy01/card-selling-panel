@@ -34,11 +34,27 @@ export default function ProviderTable() {
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer>
-        <Table stickyHeader>
+    <Paper sx={{ width: "100%",  }}>
+      <TableContainer sx={{ maxHeight: "Calc(100vh - 160px)" }}>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
+              <TableCell>Provider Name</TableCell>
+              <TableCell>Package</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell>Provider Name</TableCell>
+              <TableCell>Package</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell>Provider Name</TableCell>
+              <TableCell>Package</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell>Provider Name</TableCell>
+              <TableCell>Package</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell align="right"></TableCell>
               <TableCell>Provider Name</TableCell>
               <TableCell>Package</TableCell>
               <TableCell>Price</TableCell>
@@ -50,6 +66,94 @@ export default function ProviderTable() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow key={row.id} hover>
+                  <TableCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src="https://via.placeholder.com/40x40.png"
+                        alt={row.providerName}
+                      />
+                      <strong>{row.providerName}</strong>
+                    </div>
+                  </TableCell>
+                  <TableCell>{row.package}</TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell align="right">
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src="https://via.placeholder.com/40x40.png"
+                        alt={row.providerName}
+                      />
+                      <strong>{row.providerName}</strong>
+                    </div>
+                  </TableCell>
+                  <TableCell>{row.package}</TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell align="right">
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src="https://via.placeholder.com/40x40.png"
+                        alt={row.providerName}
+                      />
+                      <strong>{row.providerName}</strong>
+                    </div>
+                  </TableCell>
+                  <TableCell>{row.package}</TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell align="right">
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src="https://via.placeholder.com/40x40.png"
+                        alt={row.providerName}
+                      />
+                      <strong>{row.providerName}</strong>
+                    </div>
+                  </TableCell>
+                  <TableCell>{row.package}</TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell align="right">
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </TableCell>
                   <TableCell>
                     <div
                       style={{
