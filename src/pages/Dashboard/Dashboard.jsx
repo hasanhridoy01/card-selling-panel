@@ -1,5 +1,4 @@
 import CustomTable from "./CustomTable";
-import "./Dashboard.css";
 
 const Dashboard = () => {
   return (
