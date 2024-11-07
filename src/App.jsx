@@ -28,7 +28,7 @@ const App = () => {
           collapsed={collapsed}
           collapsedWidth="80px"
           style={{
-            height: "auto",
+            height: "Calc(100vh - 32px)",
             boxShadow: "0px 2px 3px 0px #0000001A",
             borderRadius: "10px",
           }}

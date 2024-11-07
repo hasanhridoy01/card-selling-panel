@@ -35,7 +35,7 @@ export default function ProviderTable() {
 
   return (
     <Paper sx={{ width: "100%",  }}>
-      <TableContainer sx={{ maxHeight: "Calc(100vh - 160px)" }}>
+      <TableContainer sx={{ maxHeight: "Calc(100vh - 168px)" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
