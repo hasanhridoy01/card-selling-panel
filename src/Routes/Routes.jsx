@@ -4,6 +4,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Login from "../pages/user-forms/Login";
 import ForgotPassword from "../pages/user-forms/ForgotPassword";
 import Role from "../pages/Role/Role";
+import Permission from "../pages/Permission/Permission";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
         path: "/role",
         element: <Role />
       },
+      {
+        path: '/permision',
+        element: <Permission />
+      }
     ],
   },
   {
