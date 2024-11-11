@@ -15,15 +15,21 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useEffect, useState } from "react";
 import { handleGetData } from "../../services/GetDataService";
 import { Link, useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import useHandleSnackbar from "../../services/HandleSnakbar";
 
 const Role = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const naviagte = useNavigate();
+
+  const handleSnackbarOpen = useHandleSnackbar();
 
   const getData = async () => {
     setLoading(true);
-    const url = `${import.meta.env.VITE_API_BASE_URL}/api/v1/public/roles`;
+    const url = `/api/v1/public/roles`;
     const res = await handleGetData(url);
 
     if (res?.status >= 200 && res?.status < 300) {
@@ -37,10 +43,25 @@ const Role = () => {
     }
   };
 
-  const handleNavigate = () => {
-    // console.log(id);
-    // naviagte(`/permision?role_id=${id}`);
-    naviagte(`/update-role`);
+  //Role Delete
+  const handleRoleDelete = async (id) => {
+    setLoadingDelete(true);
+    try {
+      const response = await axios(`/api/v1/public/role?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (response?.status >= 200 && response?.status < 300) {
+        handleSnackbarOpen(`Role Deleted SuccessFul!`, "success", 1000);
+        getData();
+      } else {
+        handleSnackbarOpen(`${response.message}`, "error", 3000);
+        setLoadingDelete(false);
+      }
+    } catch (error) {
+      handleSnackbarOpen(`Error deleting role: ${error}`, "error", 3000);
+      setLoadingDelete(false);
+    }
   };
 
   useEffect(() => {
@@ -89,6 +110,7 @@ const Role = () => {
         <Link to="/add-role">
           <Button
             sx={{
+              minWidth: "150px",
               backgroundColor: "#FC2861",
               color: "#ffffff",
               fontFamily: '"Manrope", serif',
@@ -121,14 +143,26 @@ const Role = () => {
                     <TableCell>{role.roleName}</TableCell>
                     <TableCell align="right">
                       <Button
-                        onClick={() => handleNavigate()}
+                        component={Link}
+                        to={`/update-role?role_id=${role?.id}`}
+                        // onClick={() => handleNavigate(role?.id)}
                         style={{
                           border: "1px solid #FC2861",
-                          margin: 'auto',
-                          padding: '4px'
+                          margin: "auto",
+                          padding: "4px",
                         }}
                       >
                         <BorderColorIcon sx={{ fontSize: "18px" }} />
+                      </Button>
+                      <Button
+                        onClick={() => handleRoleDelete(role?.id)}
+                        style={{
+                          border: "1px solid #FC2861",
+                          padding: "4px",
+                          marginLeft: "7px",
+                        }}
+                      >
+                        <DeleteIcon sx={{ fontSize: "18px" }} />
                       </Button>
                     </TableCell>
                   </TableRow>

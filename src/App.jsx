@@ -9,8 +9,8 @@ import axios from "axios";
 
 import userImage from "./assets/images/UserAvatar.png";
 
-// axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
-// axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+axios.defaults.headers.common["Content-Type"] = "application/json";
 
 const App = () => {
   const location = useLocation();
