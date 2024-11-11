@@ -144,6 +144,10 @@ setRoleName(res?.data?.data?.role?.roleName)
       handleSnackbarOpen("Please enter role name", "error", 3000);
       return
     }
+    if(permissionIds.length < 1){
+      handleSnackbarOpen("Please select permission", "error", 3000);
+      return
+    }
     setLoading2(true);
     let data = {
       metaInfo: {
