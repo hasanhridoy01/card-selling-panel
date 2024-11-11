@@ -7,12 +7,9 @@
 }
 
 .userSection {
-  width: 100%;
   height: 57px;
   padding: 11px;
-  border-radius: 5px;
   gap: 10px;
-  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;

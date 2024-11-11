@@ -5,6 +5,8 @@ import Login from "../pages/user-forms/Login";
 import ForgotPassword from "../pages/user-forms/ForgotPassword";
 import Role from "../pages/Role/Role";
 import Permission from "../pages/Permission/Permission";
+import AddRole from "../pages/Role/AddRole";
+import UpdateRole from "../pages/Role/UpdateRole";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +23,14 @@ export const router = createBrowserRouter([
       {
         path: '/permision',
         element: <Permission />
+      },
+      {
+        path: '/add-role',
+        element: <AddRole />
+      },
+      {
+        path: '/update-role',
+        element: <UpdateRole />
       }
     ],
   },

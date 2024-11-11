@@ -16,7 +16,7 @@ const theme = createTheme({
   palette: {
     mode: "light", // Light theme mode
     // background: {
-    //   default: ColorPalette.light.background.default, // Change the background color for dark mode
+    //   default: '#FC2861', // Change the background color for dark mode
     // },
     primary: {
       main: "#FC2861",

@@ -1,9 +1,7 @@
 import Box from "@mui/material/Box";
-import "./Role.css";
 import {
   Breadcrumbs,
   Button,
-  Link,
   Paper,
   Typography,
   Table,
@@ -16,12 +14,12 @@ import {
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useEffect, useState } from "react";
 import { handleGetData } from "../../services/GetDataService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Role = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const naviagte = useNavigate()
+  const naviagte = useNavigate();
 
   const getData = async () => {
     setLoading(true);
@@ -39,9 +37,10 @@ const Role = () => {
     }
   };
 
-  const handleNavigate = (id) => {
-    console.log(id);
-    naviagte(`/permision?role_id=${id}`)
+  const handleNavigate = () => {
+    // console.log(id);
+    // naviagte(`/permision?role_id=${id}`);
+    naviagte(`/update-role`);
   };
 
   useEffect(() => {
@@ -52,16 +51,14 @@ const Role = () => {
     <div>
       <Box
         sx={{
-          height: "62px",
           padding: "10px",
           gap: "3px",
           borderRadius: "6px",
           backgroundColor: "#ffffff",
           boxShadow: "0px 2px 3px 0px #0000001A",
           display: "flex",
-          alignItems: "start",
-          justifyContent: "left",
-          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <Typography
@@ -76,7 +73,7 @@ const Role = () => {
         >
           Role
         </Typography>
-        <Breadcrumbs aria-label="breadcrumb">
+        {/* <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/">
             MUI
           </Link>
@@ -88,7 +85,18 @@ const Role = () => {
             Core
           </Link>
           <Typography sx={{ color: "text.primary" }}>Breadcrumbs</Typography>
-        </Breadcrumbs>
+        </Breadcrumbs> */}
+        <Link to="/add-role">
+          <Button
+            sx={{
+              backgroundColor: "#FC2861",
+              color: "#ffffff",
+              fontFamily: '"Manrope", serif',
+            }}
+          >
+            Add Role
+          </Button>
+        </Link>
       </Box>
 
       <Paper
@@ -113,10 +121,11 @@ const Role = () => {
                     <TableCell>{role.roleName}</TableCell>
                     <TableCell align="right">
                       <Button
-                        onClick={() => handleNavigate(role.id)}
+                        onClick={() => handleNavigate()}
                         style={{
-                          padding: "8px 4px",
                           border: "1px solid #FC2861",
+                          margin: 'auto',
+                          padding: '4px'
                         }}
                       >
                         <BorderColorIcon sx={{ fontSize: "18px" }} />

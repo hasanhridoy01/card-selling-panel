@@ -8,22 +8,7 @@ import { Breadcrumbs, Button, Link, Paper, TextField } from "@mui/material";
 import { handleGetData } from "../../services/GetDataService";
 import { useLocation } from "react-router-dom";
 
-const permissions2 = [
-  {
-    category: "Projects",
-    options: ["Admin"],
-  },
-  {
-    category: "CRM",
-    options: ["Admin", "Export Contacts"],
-  },
-  {
-    category: "HRMS",
-    options: ["Admin", "Employee Directory", "Noticeboard"],
-  },
-];
-
-const Permission = () => {
+const UpdateRole = () => {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const [permissionIds, setPermissionIds] = useState([]);
@@ -109,7 +94,7 @@ const Permission = () => {
   }, []);
   return (
     <Box>
-      <Box
+      {/* <Box
         sx={{
           padding: "3px 10px",
           gap: "3px",
@@ -119,6 +104,10 @@ const Permission = () => {
         }}
         onClick={check}
       >
+        
+      </Box> */}
+
+      <Paper sx={{ mt: 2.75, p: 2, boxShadow: "0px 2px 3px 0px #0000001A" }}>
         <Box
           sx={{
             my: 2,
@@ -129,7 +118,7 @@ const Permission = () => {
           }}
         >
           <TextField
-            label="Add Role"
+            label="Update Role"
             variant="outlined"
             sx={{
               width: "300px",
@@ -141,34 +130,15 @@ const Permission = () => {
           />
           <Button
             variant="contained"
-            sx={{ height: "50px", boxShadow: "none", fontFamily: '"Manrope", serif', }}
+            sx={{
+              height: "50px",
+              boxShadow: "none",
+              fontFamily: '"Manrope", serif',
+            }}
           >
-            Save
+            Update
           </Button>
         </Box>
-        {/* <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            MUI
-          </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            href="/material-ui/getting-started/installation/"
-          >
-            Core
-          </Link>
-          <Typography sx={{ color: "text.primary" }}>Breadcrumbs</Typography>
-        </Breadcrumbs> */}
-      </Box>
-
-      {/* {formData.form.fields
-                      .filter((field) => field.groupId === group.id)
-                      .sort((a, b) => a.position - b.position)
-                      .map((field) => renderField(field))} */}
-
-      <Paper sx={{ mt: 2.75, p: 2, boxShadow: "0px 2px 3px 0px #0000001A" }}>
-        
-
         {!loading &&
           groups?.length > 0 &&
           groups?.map((item, index) => (
@@ -209,27 +179,10 @@ const Permission = () => {
                 ))}
               {groups?.length - 1 > index && <Divider sx={{ py: 1 }} />}
             </Box>
-            //   <Box key={index} className="permission-category">
-            //     <Box className="category-header">
-            //       <Typography sx={{ fontSize: "17px", fontWeight: 500 }}>
-            //         {permission.category}
-            //       </Typography>
-            //     </Box>
-            //     <Box className="category-options">
-            //       {permission.options.map((option, idx) => (
-            //         <Box key={idx} className="option-item">
-            //           <FormControlLabel control={<Checkbox />} label={option} />
-            //         </Box>
-            //       ))}
-            //     </Box>
-            //     <Divider />
-            //   </Box>
           ))}
       </Paper>
-
-      
     </Box>
   );
 };
 
-export default Permission;
+export default UpdateRole;

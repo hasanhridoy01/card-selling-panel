@@ -230,11 +230,72 @@ const App = () => {
               ))}
             </SubMenu>
           </Menu>
+          <div
+            style={{
+              height: "57px",
+              padding: "11px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              position: "absolute",
+              gap: collapsed ? "5px" : "10px",
+              bottom: "10px",
+            }}
+          >
+            <img src={userImage} alt="" />
+
+            {!collapsed && (
+              <h3
+                style={{
+                  fontFamily: '"Manrope", serif',
+                  fontWeight: 600,
+                  fontSize: "16px",
+                  lineHeight: "21px",
+                  color: "#2D2D2D",
+                }}
+              >
+                hasan@gmail.com
+              </h3>
+            )}
+
+            <svg
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12.5 6.5C13.3284 6.5 14 5.82843 14 5C14 4.17157 13.3284 3.5 12.5 3.5C11.6716 3.5 11 4.17157 11 5C11 5.82843 11.6716 6.5 12.5 6.5Z"
+                stroke="#969696"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.5 21.5C13.3284 21.5 14 20.8284 14 20C14 19.1716 13.3284 18.5 12.5 18.5C11.6716 18.5 11 19.1716 11 20C11 20.8284 11.6716 21.5 12.5 21.5Z"
+                stroke="#969696"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.5 13.5C13.3284 13.5 14 12.8284 14 12C14 11.1716 13.3284 10.5 12.5 10.5C11.6716 10.5 11 11.1716 11 12C11 12.8284 11.6716 13.5 12.5 13.5Z"
+                stroke="#969696"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
         </Sidebar>
         <main
           style={{
             flex: 1,
-            padding: "0px 15px",
+            padding: "0px 10px",
             width: collapsed ? "Calc(100% - 60px)" : "Calc(100% - 250px)",
             transition: collapsed && "width 500ms",
           }}
