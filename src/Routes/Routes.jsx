@@ -25,7 +25,7 @@ function RedirectToHome({ children }) {
   return !card_selling_admin_panel?.access_token ? (
     children
   ) : (
-    <Navigate to="/dashboard" />
+    <Navigate to="/" />
   );
 }
 export const router = createBrowserRouter([

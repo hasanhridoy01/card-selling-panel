@@ -7,44 +7,116 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
 import AddUser from "./AddUser";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import useHandleSnackbar from "../../services/HandleSnakbar";
 import { handleGetData } from "../../services/GetDataService";
 import { Link } from "react-router-dom";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import BorderColorIcon from "@mui/icons-material/BorderColor";
+// import DeleteIcon from "@mui/icons-material/Delete";
+import Approved from "./Approved";
+
+const mockData = Array.from({ length: 20 }).map((_, index) => ({
+  providerName: "Fastlink",
+  package: "30 Mins",
+  price: "5000 IQD",
+  id: index + 1,
+}));
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingRole, setLoadingRole] = useState(false);
   const { card_selling_admin_panel } = useContext(AuthContext);
-  // const handleSnackbarOpen = useHandleSnackbar();
 
-  //get Users
-  const getUsers = async () => {
-    setLoading(true);
-    const url = `/api/v1/private/get-system-users-by-checker?checkerId=672b62701d1f33e7aa2a7e49`;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  //get Roles
+  const getRoles = async () => {
+    setLoadingRole(true);
+    const url = `/api/v1/private/roles`;
     const res = await handleGetData(url, card_selling_admin_panel.access_token);
 
     if (res?.status >= 200 && res?.status < 300) {
-      setUsers(res?.data?.data?.users);
+      setRoles(res?.data?.data?.roles);
+      console.log(roles);
+    } else {
+      console.error(
+        "Failed to fetch roles:",
+        res?.data?.message || "Unknown error"
+      );
+      setLoadingRole(false);
+    }
+  };
+
+  //get Users
+  const getUsers = async (roleId) => {
+    setLoading(true);
+    const url = `/api/v1/private/get-system-users-by-checker?checkerId=${roleId}`;
+    const res = await handleGetData(url, card_selling_admin_panel.access_token);
+
+    if (res?.status >= 200 && res?.status < 300) {
+      const fetchedUsers = res?.data?.data?.users || [];
+      console.log("Fetched users:", fetchedUsers);
+
+      // setUsers((prevUsers) => [...prevUsers, ...fetchedUsers]);
+      // setUsers(fetchedUsers);
+      setLoading(false);
+      return fetchedUsers;
     } else {
       console.error(
         "Failed to fetch roles:",
         res?.data?.message || "Unknown error"
       );
       setLoading(false);
+      return [];
     }
   };
 
   useEffect(() => {
     getUsers();
+    getRoles();
   }, []);
+
+  // Loop over roles after fetching and pass role IDs to getUsers
+  // useEffect(() => {
+  //   if (roles.length > 0) {
+  //     setUsers([]);
+  //     roles.forEach((role) => {
+  //       getUsers(role.id);
+  //     });
+  //   }
+  // }, [roles]);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      if (roles.length > 0) {
+        setUsers([]); 
+        const usersArray = await Promise.all(
+          roles.map((role) => getUsers(role.id))
+        );
+        const combinedUsers = usersArray.flat();
+        setUsers(combinedUsers); 
+      }
+    };
+
+    fetchAllUsers();
+  }, [roles]);
 
   return (
     <div>
@@ -86,7 +158,7 @@ const Users = () => {
           </Link>
           <Typography sx={{ color: "text.primary" }}>Breadcrumbs</Typography>
         </Breadcrumbs> */}
-        <AddUser />
+        <AddUser getUsers={getUsers} />
       </Box>
 
       <Paper
@@ -111,13 +183,13 @@ const Users = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {loading &&
-                users.map((user) => (
+              {!loading &&
+                users?.map((user) => (
                   <TableRow key={user.id} hover>
                     <TableCell>{user.firstName}</TableCell>
                     <TableCell>{user.lastName}</TableCell>
-                    <TableCell>{user.phoneNumber}</TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.mobileNumber}</TableCell>
+                    <TableCell>{user.emailAddress}</TableCell>
                     <TableCell>{user.roleId}</TableCell>
                     <TableCell>{user.checkerId}</TableCell>
                     <TableCell>
@@ -128,14 +200,17 @@ const Users = () => {
                       )}
                     </TableCell>
                     <TableCell align="right">
-                      <Button
+                      {/* <Button
                         component={Link}
                         // onClick={() => handleNavigate(user?.id)}
                         variant="outlined"
                         color="success"
                       >
                         Approved
-                      </Button>
+                      </Button> */}
+
+                      <Approved UserId={user.id} getUsers={getUsers} />
+
                       {/* <Button
                         // onClick={() => handleRoleDelete(role?.id)}
                         style={{
@@ -152,6 +227,15 @@ const Users = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 15]}
+          component="div"
+          count={mockData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     </div>
   );

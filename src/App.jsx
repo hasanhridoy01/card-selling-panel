@@ -4,9 +4,10 @@ import { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import logo from "./assets/images/logo.png";
 import Switch from "@mui/material/Switch";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import axios from "axios";
-
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import userImage from "./assets/images/UserAvatar.png";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -62,10 +63,19 @@ const App = () => {
             >
               <Switch
                 checked={collapsed}
-                onChange={() => setCollapsed(!collapsed)}
+                onClick={() => setCollapsed(!collapsed)}
                 inputProps={{ "aria-label": "controlled" }}
                 style={{ background: "none" }}
               />
+              {/* {collapsed ? (
+                <IconButton onClick={() => setCollapsed(!collapsed)}>
+                  <ArrowBackIosIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={() => setCollapsed(!collapsed)}>
+                  <ArrowForwardIosIcon />
+                </IconButton>
+              )} */}
             </button>
           </div>
           <Menu>

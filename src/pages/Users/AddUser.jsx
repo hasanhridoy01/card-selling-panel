@@ -20,7 +20,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import useHandleSnackbar from "../../services/HandleSnakbar";
 import { handlePostData } from "../../services/PostDataService";
 
-const AddUser = () => {
+const AddUser = ({ getUsers }) => {
   const [open, setOpen] = useState(false);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,7 +93,7 @@ const AddUser = () => {
         lastName: lastName,
         roleId: roleId,
         status: status,
-        checkerId: checkerId,
+        checkerId: checkerId || null,
       },
     };
 
@@ -107,6 +107,7 @@ const AddUser = () => {
     if (response?.status > 199 && response?.status < 300) {
       setLoadingUser(false);
       handleSnackbarOpen("Successful", "success", 1000);
+      getUsers();
       setFirstName("");
       setLastName("");
       setEmail("");
