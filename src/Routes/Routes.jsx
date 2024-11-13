@@ -13,7 +13,6 @@ import Users from "../pages/Users/Users";
 
 function PrivateRoute({ children }) {
   const { card_selling_admin_panel } = useContext(AuthContext);
-  // console.log("card_selling_admin_panel?.data?.token", card_selling_admin_panel);
   return card_selling_admin_panel?.access_token ? (
     children
   ) : (
@@ -59,9 +58,9 @@ export const router = createBrowserRouter([
         element: <UpdateRole />,
       },
       {
-        path: '/user',
-        element: <Users />
-      }
+        path: "/user",
+        element: <Users />,
+      },
     ],
   },
   {
