@@ -5,8 +5,7 @@ const useHandleSnackbar = () => {
 
   const handleSnackbarOpen = (msg, vrnt,duration) => {
 
-    let newDuration = duration || 1000
-    // const duration = vrnt === 'error' ? 3000 : 1000;
+    let newDuration = duration || 1000;
     enqueueSnackbar(msg, {
       variant: vrnt,
       autoHideDuration: newDuration,

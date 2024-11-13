@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const handleGetData = async (url, token) => {
-  console.log('access_token',token);
-  console.log('URl',url)
   let headers = {};
   //  headers = {
   //   Authorization: `Bearer ${token}`,
