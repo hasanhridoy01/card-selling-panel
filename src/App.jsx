@@ -144,7 +144,7 @@ const App = () => {
                     color: isActive("/role") ? "#ffffff" : "#969696",
                   }}
                 >
-                  Role
+                  Roles
                 </span>
               </MenuItem>
             </Link>
