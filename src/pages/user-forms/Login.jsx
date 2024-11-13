@@ -23,18 +23,20 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import { Box } from "@mui/material";
 import axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
+import useHandleSnackbar from "../../services/HandleSnakbar";
 
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const handleSnackbarOpen = useHandleSnackbar();
   const [checked, setChecked] = useState(true);
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@cardselling.com");
+  const [password, setPassword] = useState("Password100@");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const { enqueueSnackbar } = useSnackbar();
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
@@ -69,7 +71,7 @@ const Login = () => {
   const validation = () => {
     let isError = false;
     // if (!email.trim()) {
-    //   handleSnakbarOpen("Please enter email address", "error");
+    //   handleSnackbarOpen("Please enter email address", "error");
     //   document.getElementById("email").focus();
     //   return (isError = true);
     // } else if (
@@ -77,30 +79,17 @@ const Login = () => {
     //     email.trim()
     //   )
     // ) {
-    //   handleSnakbarOpen("Invalid email address", "error");
+    //   handleSnackbarOpen("Invalid email address", "error");
     //   document.getElementById("email").focus();
     //   return (isError = true);
     // }
 
     if (!password.trim()) {
-      handleSnakbarOpen("Please enter password", "error");
+      handleSnackbarOpen("Please enter password", "error");
       document.getElementById("password").focus();
       return (isError = true);
     }
     return isError;
-  };
-
-  const handleSnakbarOpen = (msg, vrnt) => {
-    let duration;
-    if (vrnt === "error") {
-      duration = 3000;
-    } else {
-      duration = 1000;
-    }
-    enqueueSnackbar(msg, {
-      variant: vrnt,
-      autoHideDuration: duration,
-    });
   };
 
   const handleMouseDownPassword = (event) => {
@@ -108,6 +97,8 @@ const Login = () => {
   };
 
   const onSubmit = async (e) => {
+    console.log("login---------------------------------");
+
     e.preventDefault();
 
     let err = validation();
@@ -115,51 +106,72 @@ const Login = () => {
       return;
     } else {
       setLoading(true);
-      try {
-        let url = `/api/v1/public/auth/admin/signin`;
-        let data = {
-          email: email.trim().toLocaleLowerCase(),
-          password: password.trim(),
-          grant_type: process.env.REACT_APP_GRANT_TYPE,
-          client_id: proescs.env.REACT_APP_CLIENT_ID,
-          client_secret: process.env.REACT_APP_CLIENT_SECRECT,
-          scope: process.env.REACT_APP_SCOPE,
-        };
-        // let res = await handlePostData(url, data);
-        let res = await axios({
-          url: url,
-          method: "post",
-          data: data,
-        });
 
-        if (res?.status > 199 && res?.status < 300) {
-          handleSnakbarOpen("Successful", "success");
-          login({
-            email: email.trim().toLocaleLowerCase(),
-            password: password.trim(),
-            ...res.data.data,
-          });
-          if (res.data.data.password_change_required) {
-            navigate("/reset-password");
-          } else {
-            navigate("/otp");
-          }
-        }
-        setLoading(false);
+      let data = {
+        metaInfo: {
+          requestId: "1234234234234",
+          source: "Android/iOS",
+          versionCode: "3.1.4",
+          versionName: "10",
+          networkType: "Wifi/Mobile",
+          deviceID: "IMEI/DEVICE_ID/UDID",
+          deviceOSCode: 27,
+          deviceOSName: "8.1.0",
+          deviceName: "Galaxy Ace",
+          language: "en",
+          latitude: 11.3344,
+          longitude: 54.5645645,
+        },
+        attributes: {
+          email: email,
+          password: password,
+        },
+      };
+      console.log("login---------------------------------1111");
+      // let res = await handlePostData(url, data);
+      let url = `/api/v1/public/auth/signin`;
+      let response = await handlePostData(url, data);
 
-        // login(data);
-        // setLoading(false);
-        // navigate("/dashboard");
-      } catch (error) {
+      console.log("login---------------------------------222");
+      // if (response?.status === 401) {
+
+      //   navigate("/");
+      //   return;
+      // }
+      console.log("res", response?.data?.data);
+
+      if (response?.status > 199 && response?.status < 300) {
         setLoading(false);
-        console.log("catch error", error);
-        if (error?.response?.status === 500) {
-          handleSnakbarOpen(error?.response?.statusText, "error");
-        } else {
-          handleSnakbarOpen(error?.response?.data?.message, "error");
-          setErrors(error.response.data.errors);
-        }
+        handleSnackbarOpen("Successful", "success", 1000);
+        login(response?.data?.data?.data);
+        // navigate("/role");
+        setLoading(false);
+      } else {
+        handleSnackbarOpen(
+          response?.data?.error?.reason.toString(),
+          "error",
+          1000
+        );
       }
+
+      // if (res?.status > 199 && res?.status < 300) {
+      //   handleSnakbarOpen("Successful", "success");
+      //   login({
+      //     email: email.trim().toLocaleLowerCase(),
+      //     password: password.trim(),
+      //     ...res.data.data,
+      //   });
+      //   if (res.data.data.password_change_required) {
+      //     navigate("/reset-password");
+      //   } else {
+      //     navigate("/otp");
+      //   }
+      // }
+      setLoading(false);
+
+      // login(data);
+      // setLoading(false);
+      // navigate("/dashboard");
     }
   };
   return (

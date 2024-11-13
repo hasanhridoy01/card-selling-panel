@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -11,51 +11,49 @@ import { useNavigate } from "react-router-dom";
 import useHandleSnackbar from "../../services/HandleSnakbar";
 import { handlePostData } from "../../services/PostDataService";
 import { handlePutData } from "../../services/PutDataService";
+import { AuthContext } from "../../context/AuthContext";
 
 const UpdateRole = () => {
-
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const roleId = queryParams.get("role_id");
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [roleName, setRoleName] = useState("");
-
+  const { card_selling_admin_panel } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState([]);
   const [permissionIds, setPermissionIds] = useState([]);
   const [groups, setGroups] = useState([]);
-  const [roleData, setRoleData] = useState({})
+  const [roleData, setRoleData] = useState({});
   //get params Id....................!
- 
+
   console.log("param id", roleId);
 
   const getRolePermissions = async () => {
     setLoading(true);
 
-    let url = `/api/v1/public/role?id=${roleId}`;
+    let url = `/api/v1/private/role?id=${roleId}`;
     // let token = await RefreshToken(dizli_admin_panel, logout, login);
     // let token = dizli_admin_panel.access_token;
-    let res = await handleGetData(url);
-    console.log("res?.data?.data?.data ===========================", res?.data?.data?.role?.permissions
+    let res = await handleGetData(url, card_selling_admin_panel.access_token);
+    console.log(
+      "res?.data?.data?.data ===========================",
+      res?.data?.data?.role?.permissions
     );
     if (res?.status >= 200 && res?.status < 300) {
-      setRoleData(res?.data)
-setRoleName(res?.data?.data?.role?.roleName)
+      setRoleData(res?.data);
+      setRoleName(res?.data?.data?.role?.roleName);
 
-      setPermissionIds(res?.data?.data?.role?.permissions?.map((item)=>item?.name))
+      setPermissionIds(
+        res?.data?.data?.role?.permissions?.map((item) => item?.name)
+      );
       // Update state with new data
-
 
       // let newArray = res?.data?.data?.data?.map((item)=>item.isAssignable && item)
       // setPermissions(newArray);
 
-      
-
-  
-
-    
       // Optionally handle list updates if needed
       //   if (res.data.data.length > 0) {
       //     // setList(res.data.data);
@@ -70,20 +68,24 @@ setRoleName(res?.data?.data?.role?.roleName)
   const getPermissions = async () => {
     setLoading(true);
 
-    let url = `/api/v1/public/get-all-app-permissions`;
+    let url = `/api/v1/private/get-all-app-permissions`;
     // let token = await RefreshToken(dizli_admin_panel, logout, login);
     // let token = dizli_admin_panel.access_token;
-    let res = await handleGetData(url);
+    let res = await handleGetData(url, card_selling_admin_panel.access_token);
     console.log("res?.data?.data?.data", res?.data?.data?.data);
     if (res?.status >= 200 && res?.status < 300) {
       // Update state with new data
 
-
-      let newArray = res?.data?.data?.data?.map((item)=>item.isAssignable && item)
+      let newArray = res?.data?.data?.data?.map(
+        (item) => item.isAssignable && item
+      );
       setPermissions(newArray);
 
-      let groupUrl = `/api/v1/public/get-all-app-groups`;
-      let response = await handleGetData(groupUrl);
+      let groupUrl = `/api/v1/private/get-all-app-groups`;
+      let response = await handleGetData(
+        groupUrl,
+        card_selling_admin_panel.access_token
+      );
 
       console.log("response?.data?.data?.data", response?.data?.data?.data);
 
@@ -140,13 +142,13 @@ setRoleName(res?.data?.data?.role?.roleName)
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(!roleName.trim()){
+    if (!roleName.trim()) {
       handleSnackbarOpen("Please enter role name", "error", 3000);
-      return
+      return;
     }
-    if(permissionIds.length < 1){
+    if (permissionIds.length < 1) {
       handleSnackbarOpen("Please select permission", "error", 3000);
-      return
+      return;
     }
     setLoading2(true);
     let data = {
@@ -176,8 +178,12 @@ setRoleName(res?.data?.data?.role?.roleName)
     }));
 
     data.attribute.permissions = newPermissonList;
-    let url = `/api/v1/public/role?id=${roleId}`;
-    let response = await handlePutData(url, data);
+    let url = `/api/v1/private/role?id=${roleId}`;
+    let response = await handlePutData(
+      url,
+      data,
+      card_selling_admin_panel.access_token
+    );
     // if (response?.status === 401) {
 
     //   navigate("/");
@@ -190,14 +196,14 @@ setRoleName(res?.data?.data?.role?.roleName)
       handleSnackbarOpen(
         response?.data?.error?.reason.toString(),
         "error",
-        1000
+        3000
       );
     }
     setLoading2(false);
   };
 
   useEffect(() => {
-    getRolePermissions()
+    getRolePermissions();
     getPermissions();
   }, []);
   return (
@@ -261,9 +267,8 @@ setRoleName(res?.data?.data?.role?.roleName)
                   ?.filter((res) => res.groupId === item.id)
                   ?.sort((a, b) => a.orderId - b.orderId)
                   ?.map((per, i) => (
-                    <>
+                    <Box key={i} sx={{ ml: 4 }}>
                       <FormControlLabel
-                        key={i}
                         control={
                           <Checkbox
                             size="small"
@@ -275,7 +280,7 @@ setRoleName(res?.data?.data?.role?.roleName)
                         label={per?.displayName}
                         onChange={() => handlePermission(per?.permissionName)}
                       />
-                    </>
+                    </Box>
                   ))}
                 {groups?.length - 1 > index && <Divider sx={{ py: 1 }} />}
               </Box>
@@ -286,5 +291,3 @@ setRoleName(res?.data?.data?.role?.roleName)
 };
 
 export default UpdateRole;
-
- 

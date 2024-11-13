@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const handlePostData = async (url, data, token, isFormData) => {
+
+  console.log("handlePostData==========================",url, data, token, isFormData);
+  
   try {
     // let xsrfToken = axios({
     //   method: "get",

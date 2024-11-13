@@ -1,41 +1,38 @@
-import Box from "@mui/material/Box";
 import {
-  Breadcrumbs,
+  Box,
   Button,
   Paper,
-  Typography,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import AddUser from "./AddUser";
 import { useContext, useEffect, useState } from "react";
-import { handleGetData } from "../../services/GetDataService";
-import { Link, useNavigate } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
-import useHandleSnackbar from "../../services/HandleSnakbar";
 import { AuthContext } from "../../context/AuthContext";
+import useHandleSnackbar from "../../services/HandleSnakbar";
+import { handleGetData } from "../../services/GetDataService";
+import { Link } from "react-router-dom";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const Role = () => {
-  const [roles, setRoles] = useState([]);
+const Users = () => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingDelete, setLoadingDelete] = useState(false);
-  const naviagte = useNavigate();
   const { card_selling_admin_panel } = useContext(AuthContext);
+  // const handleSnackbarOpen = useHandleSnackbar();
 
-  const handleSnackbarOpen = useHandleSnackbar();
-
-  const getData = async () => {
+  //get Users
+  const getUsers = async () => {
     setLoading(true);
-    const url = `/api/v1/private/roles`;
+    const url = `/api/v1/private/get-system-users-by-checker?checkerId=672b62701d1f33e7aa2a7e49`;
     const res = await handleGetData(url, card_selling_admin_panel.access_token);
 
     if (res?.status >= 200 && res?.status < 300) {
-      setRoles(res?.data?.data?.roles);
+      setUsers(res?.data?.data?.users);
     } else {
       console.error(
         "Failed to fetch roles:",
@@ -45,32 +42,8 @@ const Role = () => {
     }
   };
 
-  //Role Delete
-  const handleRoleDelete = async (id) => {
-    setLoadingDelete(true);
-    try {
-      const response = await axios(`/api/v1/private/role?id=${id}`, {
-        method: "DELETE",
-        headers : {
-          Authorization : `Bearer ${card_selling_admin_panel.access_token}`
-        }
-      });
-
-      if (response?.status >= 200 && response?.status < 300) {
-        handleSnackbarOpen(`${response.data.message}`, "success", 1000);
-        getData();
-      } else {
-        handleSnackbarOpen(`${response.data.message}`, "error", 3000);
-        setLoadingDelete(false);
-      }
-    } catch (error) {
-      handleSnackbarOpen(`Error deleting role: ${error}`, "error", 3000);
-      setLoadingDelete(false);
-    }
-  };
-
   useEffect(() => {
-    getData();
+    getUsers();
   }, []);
 
   return (
@@ -97,8 +70,9 @@ const Role = () => {
             textAlign: "left",
           }}
         >
-          Role
+          User
         </Typography>
+
         {/* <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/">
             MUI
@@ -112,20 +86,7 @@ const Role = () => {
           </Link>
           <Typography sx={{ color: "text.primary" }}>Breadcrumbs</Typography>
         </Breadcrumbs> */}
-  
-          <Button
-            sx={{
-              minWidth: "150px",
-              backgroundColor: "#FC2861",
-              color: "#ffffff",
-              fontFamily: '"Manrope", serif',
-            }}
-            component={Link}
-           to="/add-role"
-          >
-            Add Role
-          </Button>
-       
+        <AddUser />
       </Box>
 
       <Paper
@@ -139,30 +100,44 @@ const Role = () => {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>RoleName</TableCell>
+                <TableCell>First Name</TableCell>
+                <TableCell>Last Name</TableCell>
+                <TableCell>Phone Number</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role ID</TableCell>
+                <TableCell>Checker ID</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {loading &&
-                roles.map((role) => (
-                  <TableRow key={role.id} hover>
-                    <TableCell>{role.roleName}</TableCell>
+                users.map((user) => (
+                  <TableRow key={user.id} hover>
+                    <TableCell>{user.firstName}</TableCell>
+                    <TableCell>{user.lastName}</TableCell>
+                    <TableCell>{user.phoneNumber}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.roleId}</TableCell>
+                    <TableCell>{user.checkerId}</TableCell>
+                    <TableCell>
+                      {user.status ? (
+                        <span style={{ color: "green" }}>Active</span>
+                      ) : (
+                        <span style={{ color: "#fc2861" }}>Inactive</span>
+                      )}
+                    </TableCell>
                     <TableCell align="right">
                       <Button
                         component={Link}
-                        to={`/update-role?role_id=${role?.id}`}
-                        // onClick={() => handleNavigate(role?.id)}
-                        style={{
-                          border: "1px solid #FC2861",
-                          margin: "auto",
-                          padding: "4px",
-                        }}
+                        // onClick={() => handleNavigate(user?.id)}
+                        variant="outlined"
+                        color="success"
                       >
-                        <BorderColorIcon sx={{ fontSize: "18px" }} />
+                        Approved
                       </Button>
-                      <Button
-                        onClick={() => handleRoleDelete(role?.id)}
+                      {/* <Button
+                        // onClick={() => handleRoleDelete(role?.id)}
                         style={{
                           border: "1px solid #FC2861",
                           padding: "4px",
@@ -170,7 +145,7 @@ const Role = () => {
                         }}
                       >
                         <DeleteIcon sx={{ fontSize: "18px" }} />
-                      </Button>
+                      </Button> */}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -182,4 +157,4 @@ const Role = () => {
   );
 };
 
-export default Role;
+export default Users;

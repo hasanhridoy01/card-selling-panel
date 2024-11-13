@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -7,27 +7,14 @@ import Checkbox from "@mui/material/Checkbox";
 import { Breadcrumbs, Button, Link, Paper, TextField } from "@mui/material";
 import { handleGetData } from "../../services/GetDataService";
 import { useLocation } from "react-router-dom";
-
-const permissions2 = [
-  {
-    category: "Projects",
-    options: ["Admin"],
-  },
-  {
-    category: "CRM",
-    options: ["Admin", "Export Contacts"],
-  },
-  {
-    category: "HRMS",
-    options: ["Admin", "Employee Directory", "Noticeboard"],
-  },
-];
+import { AuthContext } from "../../context/AuthContext";
 
 const Permission = () => {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const [permissionIds, setPermissionIds] = useState([]);
   const [groups, setGroups] = useState([]);
+  const { card_selling_admin_panel } = useContext(AuthContext);
   //get params Id....................!
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -37,21 +24,20 @@ const Permission = () => {
   const getPermissions = async () => {
     setLoading(true);
 
-    let url = `${
-      import.meta.env.VITE_API_BASE_URL
-    }/api/v1/public/get-all-app-permissions`;
+    let url = `/api/v1/private/get-all-app-permissions`;
     // let token = await RefreshToken(dizli_admin_panel, logout, login);
     // let token = dizli_admin_panel.access_token;
-    let res = await handleGetData(url);
+    let res = await handleGetData(url, card_selling_admin_panel.access_token);
     console.log("res?.data?.data?.data", res?.data?.data?.data);
     if (res?.status >= 200 && res?.status < 300) {
       // Update state with new data
       setPermissions(res?.data?.data?.data);
 
-      let groupUrl = `${
-        import.meta.env.VITE_API_BASE_URL
-      }/api/v1/public/get-all-app-groups`;
-      let response = await handleGetData(groupUrl);
+      let groupUrl = `/api/v1/private/get-all-app-groups`;
+      let response = await handleGetData(
+        groupUrl,
+        card_selling_admin_panel.access_token
+      );
 
       console.log("response?.data?.data?.data", response?.data?.data?.data);
 
@@ -141,7 +127,11 @@ const Permission = () => {
           />
           <Button
             variant="contained"
-            sx={{ height: "50px", boxShadow: "none", fontFamily: '"Manrope", serif', }}
+            sx={{
+              height: "50px",
+              boxShadow: "none",
+              fontFamily: '"Manrope", serif',
+            }}
           >
             Save
           </Button>
@@ -167,8 +157,6 @@ const Permission = () => {
                       .map((field) => renderField(field))} */}
 
       <Paper sx={{ mt: 2.75, p: 2, boxShadow: "0px 2px 3px 0px #0000001A" }}>
-        
-
         {!loading &&
           groups?.length > 0 &&
           groups?.map((item, index) => (
@@ -193,9 +181,8 @@ const Permission = () => {
                 ?.filter((res) => res.groupId === item.id)
                 ?.sort((a, b) => a.orderId - b.orderId)
                 ?.map((per, i) => (
-                  <>
+                  <Box key={i} sx={{ ml: 4 }}>
                     <FormControlLabel
-                      key={i}
                       control={
                         <Checkbox
                           size="small"
@@ -205,7 +192,7 @@ const Permission = () => {
                       label={per?.displayName}
                       onChange={() => handlePermission(per?.id)}
                     />
-                  </>
+                  </Box>
                 ))}
               {groups?.length - 1 > index && <Divider sx={{ py: 1 }} />}
             </Box>
@@ -226,8 +213,6 @@ const Permission = () => {
             //   </Box>
           ))}
       </Paper>
-
-      
     </Box>
   );
 };

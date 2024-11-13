@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -10,12 +10,13 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useHandleSnackbar from "../../services/HandleSnakbar";
 import { handlePostData } from "../../services/PostDataService";
+import { AuthContext } from "../../context/AuthContext";
 
 const AddRole = () => {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [roleName, setRoleName] = useState("");
-
+  const { card_selling_admin_panel } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState([]);
@@ -30,20 +31,24 @@ const AddRole = () => {
   const getPermissions = async () => {
     setLoading(true);
 
-    let url = `/api/v1/public/get-all-app-permissions`;
+    let url = `/api/v1/private/get-all-app-permissions`;
     // let token = await RefreshToken(dizli_admin_panel, logout, login);
     // let token = dizli_admin_panel.access_token;
-    let res = await handleGetData(url);
+    let res = await handleGetData(url, card_selling_admin_panel.access_token);
     console.log("res?.data?.data?.data", res?.data?.data?.data);
     if (res?.status >= 200 && res?.status < 300) {
       // Update state with new data
 
-
-      let newArray = res?.data?.data?.data?.map((item)=>item.isAssignable && item)
+      let newArray = res?.data?.data?.data?.map(
+        (item) => item.isAssignable && item
+      );
       setPermissions(newArray);
 
-      let groupUrl = `/api/v1/public/get-all-app-groups`;
-      let response = await handleGetData(groupUrl);
+      let groupUrl = `/api/v1/private/get-all-app-groups`;
+      let response = await handleGetData(
+        groupUrl,
+        card_selling_admin_panel.access_token
+      );
 
       console.log("response?.data?.data?.data", response?.data?.data?.data);
 
@@ -101,13 +106,13 @@ const AddRole = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     //validate input Field..!
-    if(!roleName.trim()){
+    if (!roleName.trim()) {
       handleSnackbarOpen("Please enter role name", "error", 3000);
-      return
+      return;
     }
-    if(permissionIds.length < 1){
+    if (permissionIds.length < 1) {
       handleSnackbarOpen("Please select permission", "error", 3000);
-      return
+      return;
     }
     setLoading2(true);
     let data = {
@@ -137,8 +142,12 @@ const AddRole = () => {
     }));
 
     data.attribute.permissions = newPermissonList;
-    let url = `/api/v1/public/roles`;
-    let response = await handlePostData(url, data);
+    let url = `/api/v1/private/roles`;
+    let response = await handlePostData(
+      url,
+      data,
+      card_selling_admin_panel.access_token
+    );
     // if (response?.status === 401) {
 
     //   navigate("/");
@@ -221,21 +230,18 @@ const AddRole = () => {
                   ?.filter((res) => res.groupId === item.id)
                   ?.sort((a, b) => a.orderId - b.orderId)
                   ?.map((per, i) => (
-                    <>
+                    <Box key={i} sx={{ ml: 4 }}>
                       <FormControlLabel
-                        key={i}
                         control={
                           <Checkbox
                             size="small"
-                            checked={permissionIds?.includes(
-                              per?.permissionName
-                            )}
+                            checked={permissionIds?.includes(per?.id)}
                           />
                         }
                         label={per?.displayName}
-                        onChange={() => handlePermission(per?.permissionName)}
+                        onChange={() => handlePermission(per?.id)}
                       />
-                    </>
+                    </Box>
                   ))}
                 {groups?.length - 1 > index && <Divider sx={{ py: 1 }} />}
               </Box>

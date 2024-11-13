@@ -69,11 +69,11 @@ const App = () => {
             </button>
           </div>
           <Menu>
-            <Link to="dashboard" style={{ textDecoration: "none" }}>
+            <Link to="/" style={{ textDecoration: "none" }}>
               <MenuItem
-                active={isActive("/dashboard")}
+                active={isActive("/")}
                 style={{
-                  backgroundColor: isActive("/dashboard") ? "#FC2861" : "",
+                  backgroundColor: isActive("/") ? "#FC2861" : "",
                 }}
                 icon={
                   <svg
@@ -85,7 +85,7 @@ const App = () => {
                   >
                     <path
                       d="M20.83 8.09501L14.28 2.85501C13 1.83501 11 1.82501 9.73002 2.84501L3.18002 8.09501C2.24002 8.84501 1.67002 10.345 1.87002 11.525L3.13002 19.065C3.42002 20.755 4.99002 22.085 6.70002 22.085H17.3C18.99 22.085 20.59 20.725 20.88 19.055L22.14 11.515C22.32 10.345 21.75 8.84501 20.83 8.09501ZM12.75 18.085C12.75 18.495 12.41 18.835 12 18.835C11.59 18.835 11.25 18.495 11.25 18.085V15.085C11.25 14.675 11.59 14.335 12 14.335C12.41 14.335 12.75 14.675 12.75 15.085V18.085Z"
-                      fill={isActive("/dashboard") ? "#ffffff" : "#969696"}
+                      fill={isActive("/") ? "#ffffff" : "#969696"}
                     />
                   </svg>
                 }
@@ -96,10 +96,10 @@ const App = () => {
                     fontWeight: 700,
                     fontSize: "16px",
                     lineHeight: "21px",
-                    color: isActive("/dashboard") ? "#ffffff" : "#969696",
+                    color: isActive("/") ? "#ffffff" : "#969696",
                   }}
                 >
-                  Home
+                  Dashboard
                 </span>
               </MenuItem>
             </Link>
@@ -135,6 +135,41 @@ const App = () => {
                   }}
                 >
                   Role
+                </span>
+              </MenuItem>
+            </Link>
+
+            <Link to="user" style={{ textDecoration: "none" }}>
+              <MenuItem
+                active={isActive("/user")}
+                style={{
+                  backgroundColor: isActive("/user") ? "#FC2861" : "",
+                }}
+                icon={
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20.83 8.09501L14.28 2.85501C13 1.83501 11 1.82501 9.73002 2.84501L3.18002 8.09501C2.24002 8.84501 1.67002 10.345 1.87002 11.525L3.13002 19.065C3.42002 20.755 4.99002 22.085 6.70002 22.085H17.3C18.99 22.085 20.59 20.725 20.88 19.055L22.14 11.515C22.32 10.345 21.75 8.84501 20.83 8.09501ZM12.75 18.085C12.75 18.495 12.41 18.835 12 18.835C11.59 18.835 11.25 18.495 11.25 18.085V15.085C11.25 14.675 11.59 14.335 12 14.335C12.41 14.335 12.75 14.675 12.75 15.085V18.085Z"
+                      fill={isActive("/user") ? "#ffffff" : "#969696"}
+                    />
+                  </svg>
+                }
+              >
+                <span
+                  style={{
+                    fontFamily: '"Manrope", serif',
+                    fontWeight: 700,
+                    fontSize: "16px",
+                    lineHeight: "21px",
+                    color: isActive("/user") ? "#ffffff" : "#969696",
+                  }}
+                >
+                  Users
                 </span>
               </MenuItem>
             </Link>
