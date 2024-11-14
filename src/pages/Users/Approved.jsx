@@ -64,6 +64,11 @@ const Approved = ({ UserId, getUsers }) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        sx={{
+          "& .MuiPaper-root": {
+            borderRadius: "16px",
+          },
+        }}
         PaperProps={{
           component: "form",
           onSubmit: (event) => {
@@ -71,13 +76,18 @@ const Approved = ({ UserId, getUsers }) => {
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title"></DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are You Sure To Approved this User?
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{ px: 5, py: 2, borderBottom: "1px solid #d3d3d3" }}
+        >
+          Are You Sure To Approved?
+        </DialogTitle>
+        <DialogContent sx={{ px: 5, pb: 0 }}>
+          <DialogContentText id="alert-dialog-description" sx={{ py: 3, textAlign: 'center' }}>
+            Would you like to approved this User
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: 5, py: 2, borderTop: "1px solid #d3d3d3" }}>
           <Button
             onClick={handleClose}
             variant="outlined"
@@ -94,6 +104,7 @@ const Approved = ({ UserId, getUsers }) => {
               color: "#ffffff",
               fontFamily: '"Manrope", serif',
               minWidth: "90px",
+
             }}
             type="submit"
             autoFocus

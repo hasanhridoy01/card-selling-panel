@@ -114,7 +114,19 @@ const Permission = () => {
             gap: 1,
           }}
         >
-          <TextField
+          <Typography
+          variant="h6"
+          sx={{
+            fontFamily: '"Manrope", serif',
+            fontSize: "16px",
+            fontWeight: 600,
+            lineHeight: "20px",
+            textAlign: "left",
+          }}
+        >
+          Permission
+        </Typography>
+          {/* <TextField
             label="Add Role"
             variant="outlined"
             sx={{
@@ -134,7 +146,7 @@ const Permission = () => {
             }}
           >
             Save
-          </Button>
+          </Button> */}
         </Box>
         {/* <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/">

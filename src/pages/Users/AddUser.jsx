@@ -154,7 +154,7 @@ const AddUser = ({ getUsers }) => {
         maxWidth="xl"
         sx={{
           "& .MuiPaper-root": {
-            borderRadius: "16px", // Set your desired border radius here
+            borderRadius: "16px", 
           },
         }}
         PaperProps={{
